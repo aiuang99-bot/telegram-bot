@@ -17,10 +17,21 @@ from telegram.ext import (
 # Load environment variables
 load_dotenv()
 
-# Get token from .env file
+# Get token from environment variable
 TOKEN = os.getenv("BOT_TOKEN")
+
+# Jika tidak ditemukan, coba cara lain (untuk Railway)
 if not TOKEN:
-    raise ValueError("BOT_TOKEN tidak ditemukan! Buat file .env dengan BOT_TOKEN=token_anda")
+    print("🔍 Mencoba membaca token dari environment...")
+    TOKEN = os.environ.get("BOT_TOKEN")
+    
+if not TOKEN:
+    print("❌ ERROR: BOT_TOKEN tidak ditemukan!")
+    print("📝 Pastikan BOT_TOKEN sudah ditambahkan di Environment Variables Railway")
+    print("📝 Atau buat file .env dengan BOT_TOKEN=token_anda")
+    exit(1)
+
+print(f"✅ Token ditemukan! Panjang token: {len(TOKEN)} karakter")
 
 # Enable logging
 logging.basicConfig(
@@ -29,7 +40,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Data storage (simple dictionary)
+# Data storage
 user_data_store = {}
 game_data = {}
 
